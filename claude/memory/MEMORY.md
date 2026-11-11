@@ -1,0 +1,28 @@
+- [No LaTeX install](no-latex-repro-only.md) — reproduction only; skip TeX Live, matplotlib mathtext is enough
+- [Confirm GPU before run](confirm-gpu-before-run.md) — check GPU usage before every GPU job, ask unless standing approval; allowed GPUs per server-current.md
+- [Repro status / handoff](repro-status-handoff.md) — READ FIRST when resuming: done notebooks, open decisions (ExternalComparison A/B/C, fig renaming, commit), run conventions
+- [Notion writing rules](notion-writing-rules.md) — which 海外インターン page gets what; insert & restructure, never just append; pre-approved
+- [APOGEE×Kepler evstate file](apogee-kepler-evstate-dataset.md) — RGB/RC label set; in this file evstate 0=AGB, 1=RGB, 2=RC; overlap with FM sets
+- [XP-only RGB on Kiel](xp-rgb-kiel-results.md) — age_inference_from_xp_spectra/preliminary/prelim_xp_rgb_kiel: OOF acc 0.944, errors mass-driven, extinction breaks transfer; logc19 is ln (use exp)
+- [Next tasks: RGB-only selection](next-tasks-rgb-selection.md) — 2026-10-14: task 1 done (predicted logg cut leaks 1–2 % dwarfs); next: reapply RGB/RC after cut, then discuss MS/AGB removal
+- [k-NN OOD gate status](knn-ood-status.md) — READ FIRST: G-band augmentation redesign — 2026-10-23: results split by task (knn/{original,noise_augmented,compare}, g_distribution, noise/{sigma_table_bprp,sigma_vs_g,noise_copies_fitting}, noise_checks), 10 (fit-σ flat copies) + 11 (GaiaXPy synthetic G flat, OK) done; k-NN with fit copies done (12, knn/noise_augmented_fitting/ref_all, provisional τ 0.5-mag bins); next: tidy knn figs into subdirs, RGB-only version
+- [Kiel plots need ground truth](kiel-plot-with-ground-truth.md) — predicted Kiel diagrams: 3 panels, APOGEE truth coloured by density + predictions coloured by APOGEE logg/Teff
+- [CPU inference OK](cpu-inference-ok.md) — StellarPerceptron inference on CPU matches GPU; use it when the GPUs are busy
+- [Abundance h5 copies](abund-h5-copies.md) — data_files/*_abund.h5: FM sets + APOGEE [α/M],[C/Fe],[N/Fe],[C/N], made by age_inference_from_xp_spectra/train_set_match_parameters
+- [No A/B labels](no-ab-labels.md) — name dirs/figs/text by content (ref_rgb_only), never "design A/B"
+- [User background](user-informatics-background.md) — informatics expert, new to astro: explain astro basics fully, no CS analogies, skip CS/ML explanations
+- [Change only what asked](change-only-what-asked.md) — fig cut changes: edit exactly that bound in fig scripts; no extra cuts, no log scripts
+- [XGBoost RGB plan](xgb-rgb-plan.md) — 2026-10-26: XGBoost on fit-σ noise copies → RGB from k-NN-passed stars; open decisions; k-NN work paused until done
+- [XGB RGB analysis plan](xgb-rgb-analysis-plan.md) — READ FIRST: 2026-11-09 age aug (g−1 copies, XP N(c,σ) redraw) → G two_per_row; 5-fold per-fold data pushed 6a5e3e6; Notion theme "Age Inference of RGB Stars" (pages only); next = attention pooling / training settings
+- [Agree before running](agree-before-running.md) — order decided ≠ go; propose dir/files/steps, record, wait for OK before any script/run
+- [main sequence wording](term-main-sequence-hedged.md) — say "main sequence" not 主系列星, "predict logg" not 予測 logg, "reference" not 参照, "giant" not 巨星, "Extinction" not 減光, "spec2label cut" not cut; region-selected stars are "らしき"/"Dwarf-like"
+- [Reply in Japanese](reply-in-japanese.md) — always answer in Japanese, even proposals after tool work
+- [Subset wording](wording-subset-not-all.md) — say 「X の一部（N 星）は Y に含まれている」, never 「…はすべて Y に入っている」
+- [No server paths in public files](no-server-paths-public.md) — never push the server path (<WORK> value in server-current.md) to GitHub; use paths.py, mask md/log, grep that path before push
+- [User writes commit messages](user-writes-commit-messages.md) — use the user's message, no attribution lines; fix typos/grammar and confirm before committing
+- [Personal rules in CLAUDE.local.md](personal-rules-claude-local.md) — 4 working rules in git-excluded CLAUDE.local.md of both repos; edit both copies together
+- [Verify literature claims](feedback-verify-literature.md) — check each paper's existence/model on arXiv/ADS; split paper-stated / general / speculation
+- [No step codes with user](no-internal-step-codes.md) — never say P4/P1-5/P6 to the user; name the task/page content instead
+- [Slide report figs](report-figs-slides.md) — talk figs+slides in age_inference_from_xp_spectra/report/space_coffee_2026_11_11/ (script/fig/log same name); edit report copies only
+- [This server](server-current.md) — conditions of the server I am on now (<WORK>, GPUs, storage, env vars) + this-server-only rules (propose knowledge-repo sync after each decision); not in git
+- [Server migration plan](server-migration-plan.md) — READ FIRST on new server: full move, knowledge repo stellar-age-inference-claude-knowledge, no sh (step by step), outputs re-run not carried, final public pipeline repo later

@@ -26,3 +26,4 @@
 - [Slide report figs](report-figs-slides.md) — talk figs+slides in age_inference_from_xp_spectra/report/space_coffee_2026_11_11/ (script/fig/log same name); edit report copies only
 - [This server](server-current.md) — conditions of the server I am on now (<WORK>, GPUs, storage, env vars) + this-server-only rules (propose knowledge-repo sync after each decision); not in git
 - [Server migration plan](server-migration-plan.md) — READ FIRST on new server: full move, knowledge repo stellar-age-inference-claude-knowledge, no sh (step by step), outputs re-run not carried, final public pipeline repo later
+- [Public repo attribution](public-repo-attribution.md) — when age inference gets its own public repo: list reused FM encoder/decoder code+weights, keep MIT notice, cite LB23

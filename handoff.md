@@ -57,17 +57,20 @@ testing_set での結果：RGB と判定された星は 4,812 星（うち APOGE
 - 出力：`age_estimation/data_split/out/fold0.npz`〜`fold4.npz`
 - 詳細：Notion「年齢推定のための augmentation」「年齢推定の学習・検証・テストの分け方」
 
+### 2-5 年齢推定のモデル（decoder）と学習の設定（2026-11-12〜13）
+
+- encoder は固定。decoder は foundation model と同じ構造（cross-attention 3 ブロック → 全結合）で幅だけ小さくし、一から学習する（作り方 3）。将来 foundation model に年齢を加えて再学習するときの目安にするため、これを本命にする。過学習がひどければ、ブロックを減らした小さい版を別に作る。
+- 最初の試しの学習：`decoder_dense_num` 256（約 39 万個）、head 16 → 8 → 4、dropout 0.1、GELU。query は年齢用・[α/M] 用の 2 本（学習する 128 次元、初期値は乱数）。
+- 損失関数：foundation model と同じ形（NN が出す log 分散 ＋ 正解の誤差 σ_y）。年齢の σ_y は入れ、年齢のコピーも元の星と同じ σ_i。[α/M] の σ_y も入れる。年齢と [α/M] は同じ重みで足し、[α/M] が NaN の 8 星はその項だけ除く。正解と σ_y は fold ごとの学習用の元の星で標準化する。
+- 学習：AdamW、学習率 1e-4 → cosine annealing（最小 1e-10）。batch 128。試しの学習は fold 0、1024 epoch（周期 128）、シード 20261113。検証用の loss は全部の行（元の星 ＋ G' のコピー）で計算し、元の星だけ・コピーだけ・ラベルごとにも記録する。どの epoch のモデルを使うかは、ユーザーが loss の図を見て決める。モデルは 8 epoch ごとに保存。
+- ディレクトリ：`age_estimation/decoder_training/`（README に構成と設定）。`encoding/`（encoder の出力、共通）と `same_structure_as_foundation_model/`（今回）に分ける。
+- 詳細：Notion「年齢推定の decoder の設計（12/11/2026）」
+
 ## 3. 決まっていないこと
 
 **年齢推定のモデル**
 
-- **decoder の作り方**：encoder は固定する。候補は 3 つで、**作り方 3 から始める**（ユーザー、2026-11-11）。
-  1. foundation model の decoder も固定し、年齢・[α/M] 用の新しい query だけを学習する（学習する重みは数百個）。
-  2. foundation model の decoder を初期値にして、全体を学習し直す。
-  3. 同じ形で幅を狭くした decoder を、最初から学習する。`stellarperceptron/layers.py` の `StellarPerceptronDecoder` を import し、`decoder_dense_num`（元は 3096）を小さくするだけで作れる（元コードは変えない）。
-- **作り方 3 の幅と設定**（2026-11-12 に決める予定）。案：幅 256（約 39 万個。128 なら約 29 万、512 なら約 67 万。attention の部分の約 20 万は幅によらない）、head 16 → 8 → 4、GELU、dropout 0.1、年齢と [α/M] で decoder を共有し query を 2 つ、query の初期値はランダム。幅は 256 の 1 つで始めるか、128 / 256 / 512 を比べるかも決める。
-- **学習の設定**：optimizer、学習率、epoch 数、early stopping を何で判定するか（検証用の元の星だけか、G' のコピーも含めるか）。
-- **σ_y（ラベルの誤差）の扱い**：損失関数に年齢の誤差を入れるか。案：年齢は 0（年齢のコピーで誤差をすでに使っているので 2 回数えない）、[α/M] は入れる。
+- **幅・ブロック数・epoch 数**：fold 0 の試しの学習（2-5 節）の loss の推移を見て決める。
 - **評価の方法**：テストの星（ノイズなしと G' のコピー）での精度を、G ごとに見る予定。APOKASC3 などとの比較は候補。
 
 **学習データ**
@@ -84,9 +87,9 @@ testing_set での結果：RGB と判定された星は 4,812 星（うち APOGE
 ## 4. 次にやること
 
 1. 新しいサーバーの準備（5 節）。
-2. decoder の作り方と学習の設定を決める（3 節。先生と相談した結果も踏まえる）。
-3. 決まったら、ディレクトリ・ファイル・手順を提案し、OK をもらってから学習のスクリプトを作る。GPU は、使ってよいものと空き状況を確かめてから使う。
-4. 5 つの fold で学習し、テストの星で評価する。
+2. `decoder_training/` の README と `.gitignore`（`*.pt`）を commit したあと、`common.py`・`encoding/scripts/encode_folds.py` を作って見てもらい、encoder の出力を作る（CPU）。
+3. `same_structure_as_foundation_model/scripts/train.py`・`plot_loss_curves.py` を作って見てもらい、GPU の空きを確かめてから fold 0 の試しの学習をする（2-5 節）。
+4. loss の図を見て幅・ブロック数・epoch 数を決め、5 つの fold で学習し、テストの星で評価する。
 5. 年齢のモデル（XGBoost で RGB を選ぶ → encoder → decoder に似た形 → 年齢）ができたら、RGB の分類と年齢の推定を 1 つのモデル（encoder → decoder に似た形）で同時に行えるかを考える（Notion「RGB の Age 推定の方針」の道 2）。
 6. 年齢推定が完成したら、必要なパイプラインだけの公開リポジトリを作る（英語）。そのとき、再利用する foundation model のコードと重み（encoder の重み、`StellarPerceptronDecoder` などのクラス、トークンの語彙、標準化の平均・標準偏差など）を一覧にし、出所とライセンスを確かめて明記する。元リポジトリは MIT ライセンス（Copyright 2023-2024 Henry Leung）なので、コードや重みを含めるなら著作権表示とライセンス文を残し、README に Leung & Bovy 2023（MNRAS 527, 1494）と元リポジトリの URL を書く。Zenodo のデータを再配布するならそのライセンスも確かめる。手法（Almannaei et al. 2024、Fallows & Sanders 2024）やカタログの出所も書く。
 

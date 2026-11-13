@@ -70,3 +70,5 @@ Pages:
 - 2026-11-04 (Wed) daily log id 40e37d5c3621819ebb9ee33f6d0dd82c (今日やること / 今日の結果 + 次にやること). Use <toggle> (not <details>) in Notion markdown.
 - 2026-11-05 (Thu) daily log id 40f37d5c3621819bb954e8cd13340178 (user-made page with Space Coffee; I added 今日やること / 今日の結果 + 次にやること toggles ABOVE it, set 一言まとめ and 作業カテゴリ).
 - 2026-11-06 (Fri) daily log id 41037d5c3621819bb6fbe70a3c90db10; 2026-11-09 (Mon) daily log id 41337d5c3621811f9cfffa3dc267a5a4. Daily-log DB data source: collection://26b8712a-85f0-4e60-9565-b12344bdbcae (props タイトル, date:日付, 作業カテゴリ, 一言まとめ, 状態, 作業時間(h)).
+- 2026-11-10 (Tue) daily log id 41437d5c362181f7880ceb63a0045133 (user Space Coffee toggle; I added 今日やること / 今日の結果 above it on 11-11: slide structure, report figs, slide text). 2026-11-11 (Wed) daily log id 41537d5c362181f7b3f4d66fb90be623 (talk, k-NN distance check, server-move prep, decoder 作り方 3, commits, 次にやること).
+- 2026-11-12 (Thu) daily log id 41637d5c362181c1bd95de3e88dbf6f5 (hyperparams, query, loss/σ_y, training settings, 次にやること).

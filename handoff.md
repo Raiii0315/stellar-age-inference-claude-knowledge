@@ -64,7 +64,7 @@ testing_set での結果：RGB と判定された星は 4,812 星（うち APOGE
 - 損失関数：foundation model と同じ形（NN が出す log 分散 ＋ 正解の誤差 σ_y）。年齢の σ_y は入れ、年齢のコピーも元の星と同じ σ_i。[α/M] の σ_y も入れる。年齢と [α/M] は同じ重みで足し、[α/M] が NaN の 8 星はその項だけ除く。正解と σ_y は fold ごとの学習用の元の星で標準化する。
 - 学習：AdamW、学習率 1e-4 → cosine annealing（最小 1e-10）。batch 128。試しの学習は fold 0、1024 epoch（周期 128）、シード 20261113。検証用の loss は全部の行（元の星 ＋ G' のコピー）で計算し、元の星だけ・コピーだけ・ラベルごとにも記録する。どの epoch のモデルを使うかは、ユーザーが loss の図を見て決める。モデルは 8 epoch ごとに保存。
 - ディレクトリ：`age_estimation/decoder_training/`（README に構成と設定）。`encoding/`（encoder の出力、共通）と `same_structure_as_foundation_model/`（今回）に分ける。
-- 詳細：Notion「年齢推定の decoder の設計（12/11/2026）」
+- 詳細：Notion「年齢推定の decoder の説明（12/11/2026）」
 
 ## 3. 決まっていないこと
 
